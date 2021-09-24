@@ -2,33 +2,28 @@ struct Tuple<Tuple> {
     tuple: Tuple,
 }
 
-impl<X, T0> PartialEq<X> for Tuple<(T0,)>
-where
-    T0: std::cmp::PartialEq<X>,
-{
-    fn eq(&self, value: &X) -> bool {
-        self.tuple.0 == *value
+// HACK https://www.reddit.com/r/rust/comments/339yj3/tuple_indexing_in_a_macro/cqixd5h/
+// modified to return a reference, due to compilation error
+macro_rules! tuple_index {
+    ($tuple:expr, $idx:tt) => {{ &$tuple.$idx }}
+}
+
+macro_rules! make_partialeq {
+    ($(($t: ident, $n: tt)),+) => {
+        impl<X, $($t, )+> PartialEq<X> for Tuple<($($t, )+)>
+        where
+            $($t: std::cmp::PartialEq<X>, )+
+        {
+            fn eq(&self, value: &X) -> bool {
+                $(tuple_index!(self.tuple, $n) == value || )+ false
+            }
+        }
     }
 }
-impl<X, T0, T1> PartialEq<X> for Tuple<(T0, T1)>
-where
-    T0: std::cmp::PartialEq<X>,
-    T1: std::cmp::PartialEq<X>,
-{
-    fn eq(&self, value: &X) -> bool {
-        self.tuple.0 == *value || self.tuple.1 == *value
-    }
-}
-impl<X, T0, T1, T2> PartialEq<X> for Tuple<(T0, T1, T2)>
-where
-    T0: std::cmp::PartialEq<X>,
-    T1: std::cmp::PartialEq<X>,
-    T2: std::cmp::PartialEq<X>,
-{
-    fn eq(&self, value: &X) -> bool {
-        self.tuple.0 == *value || self.tuple.1 == *value || self.tuple.2 == *value
-    }
-}
+
+make_partialeq!((T0, 0));
+make_partialeq!((T0, 0), (T1, 1));
+make_partialeq!((T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
