@@ -82,4 +82,19 @@ mod tests {
         assert!(!(any_of!(1, 2, 3) == 7));
     }
 
+    #[test]
+    fn any_of_with_two_strings_matches_first_string() {
+        assert!(any_of!("a", "b") == "a");
+    }
+
+    #[test]
+    fn any_of_with_two_strings_matches_second_string() {
+        assert!(any_of!("a", "b") == "b");
+    }
+
+    #[test]
+    fn any_of_with_two_strings_doesnt_match_other_string() {
+        assert!(!(any_of!("a", "b") == "x"));
+    }
+
 }
