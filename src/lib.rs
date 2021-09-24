@@ -9,8 +9,8 @@ macro_rules! tuple_index {
 }
 
 macro_rules! make_partialeq {
-    ($(($t: ident, $n: tt)),+) => {
-        impl<X, $($t, )+> PartialEq<X> for Tuple<($($t, )+)>
+    ($pack: ident, $(($t: ident, $n: tt)),+) => {
+        impl<X, $($t, )+> PartialEq<X> for $pack<($($t, )+)>
         where
             $($t: std::cmp::PartialEq<X>, )+
         {
@@ -21,9 +21,9 @@ macro_rules! make_partialeq {
     }
 }
 
-make_partialeq!((T0, 0));
-make_partialeq!((T0, 0), (T1, 1));
-make_partialeq!((T0, 0), (T1, 1), (T2, 2));
+make_partialeq!(AnyOfPack, (T0, 0));
+make_partialeq!(AnyOfPack, (T0, 0), (T1, 1));
+make_partialeq!(AnyOfPack, (T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
