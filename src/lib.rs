@@ -2,6 +2,10 @@ struct AnyOfPack<Tuple> {
     tuple: Tuple,
 }
 
+struct NoneOfPack<Tuple> {
+    tuple: Tuple,
+}
+
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
         impl<X, $($t, )+> PartialEq<X> for $pack<($($t, )+)>
@@ -22,9 +26,22 @@ where
     lhs == rhs
 }
 
+fn not_equals<T, X>(lhs: &T, rhs: &X) -> bool
+where
+    T: std::cmp::PartialEq<X>,
+{
+    lhs != rhs
+}
+
 macro_rules! or {
     ($($v: expr),+) => {
         $($v ||)+ false
+    }
+}
+
+macro_rules! and {
+    ($($v: expr),+) => {
+        $($v &&)+ true
     }
 }
 
@@ -32,9 +49,21 @@ make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0));
 make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1));
 make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1), (T2, 2));
 
+make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0));
+make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1));
+make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1), (T2, 2));
+
 macro_rules! any_of {
     ($($value: literal),+) => {
         AnyOfPack {
+            tuple : ($($value, )+)
+        }
+    };
+}
+
+macro_rules! none_of {
+    ($($value: literal),+) => {
+        NoneOfPack {
             tuple : ($($value, )+)
         }
     };
