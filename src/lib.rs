@@ -59,21 +59,19 @@ macro_rules! sum_is_one {
     }
 }
 
-make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0));
-make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1));
-make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1), (T2, 2));
+macro_rules! make_pack {
+    ($pack: ident, $fn: ident, $map: ident, $reduce: tt) => {
+        make_partialeq!($pack, $fn, $map, $reduce, (T0, 0));
+        make_partialeq!($pack, $fn, $map, $reduce, (T0, 0), (T1, 1));
+        make_partialeq!($pack, $fn, $map, $reduce, (T0, 0), (T1, 1), (T2, 2));
+    }
+}
 
-make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0));
-make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1));
-make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1), (T2, 2));
+make_pack!(AnyOfPack, eq, equals, or);
+make_pack!(NoneOfPack, eq, not_equals, and);
+make_pack!(AllOfPack, eq, equals, and);
+make_pack!(OneOfPack, eq, equals, sum_is_one);
 
-make_partialeq!(AllOfPack, eq, equals, and, (T0, 0));
-make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1));
-make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1), (T2, 2));
-
-make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0));
-make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0), (T1, 1));
-make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
