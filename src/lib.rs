@@ -10,6 +10,10 @@ struct AllOfPack<Tuple> {
     tuple: Tuple,
 }
 
+struct OneOfPack<Tuple> {
+    tuple: Tuple,
+}
+
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
         impl<Value, $($t, )+> PartialEq<Value> for $pack<($($t, )+)>
@@ -49,6 +53,12 @@ macro_rules! and {
     }
 }
 
+macro_rules! sum_is_one {
+    ($($v: expr),+) => {
+        $($v as i32 +)+ 0 == 1
+    }
+}
+
 make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0));
 make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1));
 make_partialeq!(AnyOfPack, eq, equals, or, (T0, 0), (T1, 1), (T2, 2));
@@ -60,6 +70,10 @@ make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1), (T2, 2));
 make_partialeq!(AllOfPack, eq, equals, and, (T0, 0));
 make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1));
 make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1), (T2, 2));
+
+make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0));
+make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0), (T1, 1));
+make_partialeq!(OneOfPack, eq, equals, sum_is_one, (T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
@@ -80,6 +94,14 @@ macro_rules! none_of {
 macro_rules! all_of {
     ($($value: literal),+) => {
         AllOfPack {
+            tuple : ($($value, )+)
+        }
+    };
+}
+
+macro_rules! one_of {
+    ($($value: literal),+) => {
+        OneOfPack {
             tuple : ($($value, )+)
         }
     };
