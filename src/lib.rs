@@ -1,4 +1,4 @@
-struct Tuple<Tuple> {
+struct AnyOfPack<Tuple> {
     tuple: Tuple,
 }
 
@@ -27,7 +27,7 @@ make_partialeq!((T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
-        Tuple {
+        AnyOfPack {
             tuple : ($($value, )+)
         }
     };
