@@ -41,7 +41,7 @@ macro_rules! any_of {
 }
 
 #[cfg(test)]
-mod tests {
+mod any_of_tests {
     use super::*;
 
     #[test]
