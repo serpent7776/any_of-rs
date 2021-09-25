@@ -2,12 +2,6 @@ struct AnyOfPack<Tuple> {
     tuple: Tuple,
 }
 
-// HACK https://www.reddit.com/r/rust/comments/339yj3/tuple_indexing_in_a_macro/cqixd5h/
-// modified to return a reference, due to compilation error
-macro_rules! tuple_index {
-    ($tuple:expr, $idx:tt) => {{ &$tuple.$idx }}
-}
-
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
         impl<X, $($t, )+> PartialEq<X> for $pack<($($t, )+)>
