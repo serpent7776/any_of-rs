@@ -216,3 +216,85 @@ mod none_of_tests {
     }
 
 }
+
+#[cfg(test)]
+mod all_of_tests {
+    use super::*;
+
+    #[test]
+    fn all_of_with_single_int_matches_its_int() {
+        assert!(all_of!(1) == 1);
+    }
+
+    #[test]
+    fn all_of_with_single_int_doesnt_match_other_int() {
+        assert!(!(all_of!(1) == 7));
+    }
+
+    #[test]
+    fn all_of_with_two_distinct_ints_doesnt_match_first_int() {
+        assert!(!(all_of!(1, 2) == 1));
+    }
+
+    #[test]
+    fn all_of_with_two_distinct_ints_doesnt_match_second_int() {
+        assert!(!(all_of!(1, 2) == 2));
+    }
+
+    #[test]
+    fn all_of_with_two_same_ints_matches_that_int() {
+        assert!(all_of!(2, 2) == 2);
+    }
+
+    #[test]
+    fn all_of_with_two_same_ints_doesnt_match_other_int() {
+        assert!(!(all_of!(2, 2) == 7));
+    }
+
+    #[test]
+    fn all_of_with_three_distinct_ints_doesnt_match_first_int() {
+        assert!(!(all_of!(1, 2, 3) == 1));
+    }
+
+    #[test]
+    fn all_of_with_three_distinct_ints_doesnt_match_second_int() {
+        assert!(!(all_of!(1, 2, 3) == 2));
+    }
+
+    #[test]
+    fn all_of_with_three_distinct_ints_doesnt_match_third_int() {
+        assert!(!(all_of!(1, 2, 3) == 3));
+    }
+
+    #[test]
+    fn all_of_with_three_same_ints_matches_that_int() {
+        assert!(all_of!(3, 3, 3) == 3);
+    }
+
+    #[test]
+    fn all_of_with_three_same_ints_doesnt_match_other_int() {
+        assert!(!(all_of!(3, 3, 3) == 7));
+    }
+
+    #[test]
+    fn all_of_with_two_distinct_strings_doesnt_match_first_string() {
+        assert!(!(all_of!("a", "b") == "a"));
+    }
+
+    #[test]
+    fn all_of_with_two_distinct_strings_doesnt_match_second_string() {
+        assert!(!(all_of!("a", "b") == "b"));
+    }
+
+    #[test]
+    fn all_of_with_two_same_strings_matches_that_string() {
+        assert!(all_of!("r", "r") == "r");
+    }
+
+    #[test]
+    fn all_of_with_two_same_strings_doesnt_match_other_string() {
+        assert!(!(all_of!("r", "r") == "a"));
+    }
+
+}
+
