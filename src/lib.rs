@@ -8,27 +8,27 @@ struct NoneOfPack<Tuple> {
 
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
-        impl<X, $($t, )+> PartialEq<X> for $pack<($($t, )+)>
+        impl<Value, $($t, )+> PartialEq<Value> for $pack<($($t, )+)>
         where
-            $($t: std::cmp::PartialEq<X>, )+
+            $($t: std::cmp::PartialEq<Value>, )+
         {
-            fn $fn(&self, value: &X) -> bool {
+            fn $fn(&self, value: &Value) -> bool {
                 $reduce!($($map(&self.tuple.$n, value)),+)
             }
         }
     }
 }
 
-fn equals<T, X>(lhs: &T, rhs: &X) -> bool
+fn equals<Tuple, Value>(lhs: &Tuple, rhs: &Value) -> bool
 where
-    T: std::cmp::PartialEq<X>,
+    Tuple: std::cmp::PartialEq<Value>,
 {
     lhs == rhs
 }
 
-fn not_equals<T, X>(lhs: &T, rhs: &X) -> bool
+fn not_equals<Tuple, Value>(lhs: &Tuple, rhs: &Value) -> bool
 where
-    T: std::cmp::PartialEq<X>,
+    Tuple: std::cmp::PartialEq<Value>,
 {
     lhs != rhs
 }
