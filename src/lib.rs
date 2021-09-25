@@ -6,6 +6,10 @@ struct NoneOfPack<Tuple> {
     tuple: Tuple,
 }
 
+struct AllOfPack<Tuple> {
+    tuple: Tuple,
+}
+
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
         impl<Value, $($t, )+> PartialEq<Value> for $pack<($($t, )+)>
@@ -53,6 +57,10 @@ make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0));
 make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1));
 make_partialeq!(NoneOfPack, eq, not_equals, and, (T0, 0), (T1, 1), (T2, 2));
 
+make_partialeq!(AllOfPack, eq, equals, and, (T0, 0));
+make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1));
+make_partialeq!(AllOfPack, eq, equals, and, (T0, 0), (T1, 1), (T2, 2));
+
 macro_rules! any_of {
     ($($value: literal),+) => {
         AnyOfPack {
@@ -64,6 +72,14 @@ macro_rules! any_of {
 macro_rules! none_of {
     ($($value: literal),+) => {
         NoneOfPack {
+            tuple : ($($value, )+)
+        }
+    };
+}
+
+macro_rules! all_of {
+    ($($value: literal),+) => {
+        AllOfPack {
             tuple : ($($value, )+)
         }
     };
