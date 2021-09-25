@@ -9,21 +9,28 @@ macro_rules! tuple_index {
 }
 
 macro_rules! make_partialeq {
-    ($pack: ident, $fn: ident, $(($t: ident, $n: tt)),+) => {
+    ($pack: ident, $fn: ident, $map: ident, $(($t: ident, $n: tt)),+) => {
         impl<X, $($t, )+> PartialEq<X> for $pack<($($t, )+)>
         where
             $($t: std::cmp::PartialEq<X>, )+
         {
             fn $fn(&self, value: &X) -> bool {
-                $(tuple_index!(self.tuple, $n) == value || )+ false
+                $($map(tuple_index!(self.tuple, $n), value) || )+ false
             }
         }
     }
 }
 
-make_partialeq!(AnyOfPack, eq, (T0, 0));
-make_partialeq!(AnyOfPack, eq, (T0, 0), (T1, 1));
-make_partialeq!(AnyOfPack, eq, (T0, 0), (T1, 1), (T2, 2));
+fn equals<T, X>(lhs: &T, rhs: &X) -> bool
+where
+    T: std::cmp::PartialEq<X>,
+{
+    lhs == rhs
+}
+
+make_partialeq!(AnyOfPack, eq, equals, (T0, 0));
+make_partialeq!(AnyOfPack, eq, equals, (T0, 0), (T1, 1));
+make_partialeq!(AnyOfPack, eq, equals, (T0, 0), (T1, 1), (T2, 2));
 
 macro_rules! any_of {
     ($($value: literal),+) => {
