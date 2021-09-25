@@ -134,3 +134,69 @@ mod any_of_tests {
     }
 
 }
+
+#[cfg(test)]
+mod none_of_tests {
+    use super::*;
+
+    #[test]
+    fn none_of_with_single_int_doesnt_match_its_int() {
+        assert!(!(none_of!(1) == 1));
+    }
+
+    #[test]
+    fn none_of_with_single_int_matches_other_int() {
+        assert!(none_of!(1) == 7);
+    }
+
+    #[test]
+    fn none_of_with_two_ints_doesnt_match_first_int() {
+        assert!(!(none_of!(1, 2) == 1));
+    }
+
+    #[test]
+    fn none_of_with_two_ints_doesnt_match_second_int() {
+        assert!(!(none_of!(1, 2) == 2));
+    }
+
+    #[test]
+    fn none_of_with_two_ints_matches_other_int() {
+        assert!(none_of!(1, 2) == 7);
+    }
+
+    #[test]
+    fn none_of_with_three_ints_doesnt_match_first_int() {
+        assert!(!(none_of!(1, 2, 3) == 1));
+    }
+
+    #[test]
+    fn none_of_with_three_ints_doesnt_match_second_int() {
+        assert!(!(none_of!(1, 2, 3) == 2));
+    }
+
+    #[test]
+    fn none_of_with_three_ints_doesnt_match_third_int() {
+        assert!(!(none_of!(1, 2, 3) == 3));
+    }
+
+    #[test]
+    fn none_of_with_three_ints_matches_other_int() {
+        assert!(none_of!(1, 2, 3) == 7);
+    }
+
+    #[test]
+    fn none_of_with_two_strings_doesnt_match_first_string() {
+        assert!(!(none_of!("a", "b") == "a"));
+    }
+
+    #[test]
+    fn none_of_with_two_strings_doesnt_match_second_string() {
+        assert!(!(none_of!("a", "b") == "b"));
+    }
+
+    #[test]
+    fn none_of_with_two_strings_matches_other_string() {
+        assert!(none_of!("a", "b") == "x");
+    }
+
+}
