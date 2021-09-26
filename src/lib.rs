@@ -1,19 +1,3 @@
-struct AnyOfPack<Tuple> {
-    tuple: Tuple,
-}
-
-struct NoneOfPack<Tuple> {
-    tuple: Tuple,
-}
-
-struct AllOfPack<Tuple> {
-    tuple: Tuple,
-}
-
-struct OneOfPack<Tuple> {
-    tuple: Tuple,
-}
-
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
         impl<Value, $($t, )+> PartialEq<Value> for $pack<($($t, )+)>
@@ -61,6 +45,10 @@ macro_rules! sum_is_one {
 
 macro_rules! make_pack {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt) => {
+        struct $pack<Tuple> {
+            tuple: Tuple,
+        }
+
         make_partialeq!($pack, $fn, $map, $reduce, (T0, 0));
         make_partialeq!($pack, $fn, $map, $reduce, (T0, 0), (T1, 1));
         make_partialeq!($pack, $fn, $map, $reduce, (T0, 0), (T1, 1), (T2, 2));
