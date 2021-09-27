@@ -60,7 +60,7 @@ make_pack!(NoneOfPack, eq, not_equals, and);
 make_pack!(AllOfPack, eq, equals, and);
 make_pack!(OneOfPack, eq, equals, sum_is_one);
 
-
+#[macro_export]
 macro_rules! any_of {
     ($($value: literal),+) => {
         AnyOfPack {
@@ -69,6 +69,7 @@ macro_rules! any_of {
     };
 }
 
+#[macro_export]
 macro_rules! none_of {
     ($($value: literal),+) => {
         NoneOfPack {
@@ -77,6 +78,7 @@ macro_rules! none_of {
     };
 }
 
+#[macro_export]
 macro_rules! all_of {
     ($($value: literal),+) => {
         AllOfPack {
@@ -85,6 +87,7 @@ macro_rules! all_of {
     };
 }
 
+#[macro_export]
 macro_rules! one_of {
     ($($value: literal),+) => {
         OneOfPack {
