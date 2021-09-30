@@ -63,7 +63,7 @@ make_pack!(OneOfPack, eq, equals, sum_is_one);
 #[macro_export]
 macro_rules! any_of {
     ($($value: literal),+) => {
-        AnyOfPack {
+        $crate::AnyOfPack {
             tuple : ($($value, )+)
         }
     };
@@ -72,7 +72,7 @@ macro_rules! any_of {
 #[macro_export]
 macro_rules! none_of {
     ($($value: literal),+) => {
-        NoneOfPack {
+        $crate::NoneOfPack {
             tuple : ($($value, )+)
         }
     };
@@ -81,7 +81,7 @@ macro_rules! none_of {
 #[macro_export]
 macro_rules! all_of {
     ($($value: literal),+) => {
-        AllOfPack {
+        $crate::AllOfPack {
             tuple : ($($value, )+)
         }
     };
@@ -90,7 +90,7 @@ macro_rules! all_of {
 #[macro_export]
 macro_rules! one_of {
     ($($value: literal),+) => {
-        OneOfPack {
+        $crate::OneOfPack {
             tuple : ($($value, )+)
         }
     };
