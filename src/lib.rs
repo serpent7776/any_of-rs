@@ -1,8 +1,8 @@
 macro_rules! make_partialeq {
     ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
-        impl<Value, $($t, )+> core::cmp::PartialEq<Value> for $pack<($($t, )+)>
+        impl<Value, $($t, )+> ::core::cmp::PartialEq<Value> for $pack<($($t, )+)>
         where
-            $($t: core::cmp::PartialEq<Value>, )+
+            $($t: ::core::cmp::PartialEq<Value>, )+
         {
             fn $fn(&self, value: &Value) -> bool {
                 $reduce!($($map(&self.tuple.$n, value)),+)
@@ -13,14 +13,14 @@ macro_rules! make_partialeq {
 
 fn equals<Tuple, Value>(lhs: &Tuple, rhs: &Value) -> bool
 where
-    Tuple: core::cmp::PartialEq<Value>,
+    Tuple: ::core::cmp::PartialEq<Value>,
 {
     lhs == rhs
 }
 
 fn not_equals<Tuple, Value>(lhs: &Tuple, rhs: &Value) -> bool
 where
-    Tuple: core::cmp::PartialEq<Value>,
+    Tuple: ::core::cmp::PartialEq<Value>,
 {
     lhs != rhs
 }
