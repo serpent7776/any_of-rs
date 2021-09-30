@@ -1,5 +1,5 @@
 macro_rules! make_partialeq {
-    ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+) => {
+    ($pack: ident, $fn: ident, $map: ident, $reduce: tt, $(($t: ident, $n: tt)),+ $(,)?) => {
         impl<Value, $($t, )+> ::core::cmp::PartialEq<Value> for $pack<($($t, )+)>
         where
             $($t: ::core::cmp::PartialEq<Value>, )+
